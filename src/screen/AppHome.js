@@ -17,17 +17,14 @@ import {
   View,
   ScrollView,
   SafeAreaView,
-  Pressable,
   FlatList,
 } from 'react-native';
-import {Row, Rows, Table} from 'react-native-table-component';
 import Toast from 'react-native-toast-message';
 import {useSelector} from 'react-redux';
 import {API} from '../axios.config';
 import AppHeader from '../component/AppHeader';
 import {ChatBot} from '../component/ChatBot';
 import {imgBaseUrl} from '../image.config';
-import {AppContext} from '../state/app.context';
 
 export const capitalize = str => {
   return str?.charAt(0)?.toUpperCase() + str?.slice(1);
@@ -64,7 +61,7 @@ export const RenderWhyShouldOrderView = () => {
       includeInOneFoodPot: false,
     },
     {
-      title: 'Hot Food\nGuarantee!!',
+      title: 'Hot Food Guarantee!!',
       otherAppText: '',
       oneFoodPotAppText: '',
       includeInOtherApp: false,
@@ -335,6 +332,7 @@ const styles = StyleSheet.create({
   },
   center: {
     alignSelf: 'center',
+    textAlign: 'center',
   },
   orderContainer: {
     backgroundColor: '#faf3eb',
@@ -385,6 +383,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 15,
     fontWeight: 'bold',
+    maxWidth: 150,
   },
   value: {
     color: 'black',
