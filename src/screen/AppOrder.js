@@ -710,7 +710,7 @@ const AppOrder = () => {
                       fontWeight: '600',
                       textAlign: 'center',
                     }}>
-                    Cash On Delivery
+                    Pay On Delivery
                   </Text>
                 </Pressable>
                 {/* Todo:- Will use it later. */}

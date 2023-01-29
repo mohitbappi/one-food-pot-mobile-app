@@ -17,7 +17,6 @@ import {useDispatch} from 'react-redux';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
 import {API} from '../axios.config.js';
-import AppHeader from '../component/AppHeader';
 import {ChatBot} from '../component/ChatBot.js';
 import {CustomInput} from './AppLogin';
 

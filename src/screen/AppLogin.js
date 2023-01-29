@@ -34,7 +34,7 @@ const initSchema = {
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email(),
-  password: Yup.string().required().min(6).max(18),
+  password: Yup.string().required('This field is required').min(6).max(18),
 });
 
 export default () => {
@@ -110,7 +110,11 @@ export default () => {
                       value={values?.email}
                       onChangeText={handleChange('email')}
                       isInvalid={!!touched?.email && !!errors?.email}
-                      errorMsg={'This field is required'}
+                      errorMsg={
+                        errors?.email === 'email must be a valid email'
+                          ? 'Invalid Email'
+                          : 'This field is required'
+                      }
                     />
                     <CustomInput
                       style={styles.inputStyle}
@@ -119,7 +123,7 @@ export default () => {
                       onChangeText={handleChange('password')}
                       isInvalid={!!touched?.password && !!errors?.password}
                       secureTextEntry={true}
-                      errorMsg={'This field is required'}
+                      errorMsg={errors?.password}
                     />
                     <Text
                       style={{...styles.inputStyle, color: '#333'}}
@@ -164,6 +168,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     marginBottom: 15,
+    fontWeight: 'bold',
   },
 });
 
