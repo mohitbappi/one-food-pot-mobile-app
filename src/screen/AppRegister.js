@@ -34,8 +34,12 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(4).max(24),
   email: Yup.string().required().email(),
   mobile: Yup.string().phone('CA').required(),
-  password: Yup.string().required().min(6).max(18),
-  confirmPassword: Yup.string().required().min(6).max(18),
+  password: Yup.string().required('This field is required').min(6).max(18),
+  confirmPassword: Yup.string()
+    .required('This field is required')
+    .min(6)
+    .max(18)
+    .oneOf([Yup.ref('password')], 'Passwords do not match'),
 });
 
 export default () => {
@@ -154,7 +158,7 @@ export default () => {
                     secureTextEntry={true}
                     onChangeText={handleChange('password')}
                     isInvalid={!!touched?.password && !!errors?.password}
-                    errorMsg={'This field is required'}
+                    errorMsg={errors?.password}
                   />
                   <CustomInput
                     style={styles.inputStyle}
@@ -162,8 +166,10 @@ export default () => {
                     value={values?.confirmPassword}
                     secureTextEntry={true}
                     onChangeText={handleChange('confirmPassword')}
-                    isInvalid={values?.confirmPassword !== values?.password}
-                    errorMsg={'Password do not match'}
+                    isInvalid={
+                      !!touched?.confirmPassword && !!errors?.confirmPassword
+                    }
+                    errorMsg={errors?.confirmPassword}
                   />
                   <View style={{alignSelf: 'center'}}>
                     <Text>By registering you are agreed with our </Text>
