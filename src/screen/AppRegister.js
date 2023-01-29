@@ -128,7 +128,11 @@ export default () => {
                     value={values?.email}
                     onChangeText={handleChange('email')}
                     isInvalid={!!touched?.email && !!errors?.email}
-                    errorMsg={'This field is required'}
+                    errorMsg={
+                      errors?.email === 'email must be a valid email'
+                        ? 'Invalid Email'
+                        : 'This field is required'
+                    }
                   />
                   <CustomInput
                     style={styles.inputStyle}
@@ -136,23 +140,13 @@ export default () => {
                     value={values?.mobile}
                     onChangeText={handleChange('mobile')}
                     isInvalid={!!touched?.mobile && !!errors?.mobile}
-                    errorMsg={'This field is required'}
-                  />
-                  {/* Todo:- Will use it later. */}
-                  {/* <Select
-                    style={styles.inputStyle}
-                    data={locationArr}
-                    selectedOption={tempLocation}
-                    status={
-                      !!touched?.delivery && !!errors?.delivery && 'danger'
+                    errorMsg={
+                      errors?.mobile ===
+                      'mobile must be a valid phone number for region CA'
+                        ? 'Invalid Number'
+                        : 'This field is required'
                     }
-                    label="Location"
-                    labelStyle={{color: '#000'}}
-                    onSelect={val => {
-                      setFieldValue('delivery', val?._id);
-                      setTempLocation(val);
-                    }}
-                  /> */}
+                  />
                   <CustomInput
                     style={styles.inputStyle}
                     label="Password"

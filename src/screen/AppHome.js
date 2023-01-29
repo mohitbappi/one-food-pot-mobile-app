@@ -283,7 +283,10 @@ export default () => {
                 data={location}
               />
             </View>
-            <Button style={{marginBottom: 8}} onPress={handleOrderRedirect}>
+            <Button
+              style={{marginBottom: 8}}
+              onPress={handleOrderRedirect}
+              disabled={recipeInfo?.remainingQuantity === 0}>
               Order Now
             </Button>
             {/* <Button
@@ -333,6 +336,7 @@ const styles = StyleSheet.create({
   center: {
     alignSelf: 'center',
     textAlign: 'center',
+    marginBottom: 10,
   },
   orderContainer: {
     backgroundColor: '#faf3eb',
