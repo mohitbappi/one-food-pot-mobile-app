@@ -453,8 +453,6 @@ const AppOrder = () => {
     }
   }, [isProcessing]);
 
-  console.log('check===', jsonData?.qty);
-
   return (
     <SafeAreaView style={{flex: 1, flexGrow: 1}}>
       <Layout style={styles.container}>
