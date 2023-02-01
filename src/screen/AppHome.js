@@ -215,18 +215,18 @@ export default () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <Layout style={styles.container}>
-        <AppHeader title={'Onefood'} />
+        <AppHeader title={'Onefoodpot'} />
         <Divider />
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}>
           <Layout
             style={{backgroundColor: '#faf3eb', padding: 15, paddingTop: 0}}>
-            <Text
-              style={[
-                styles.whyOrder,
-                styles.center,
-              ]}>{`We only have ${recipeInfo?.remainingQuantity} order remaining order soon!!!`}</Text>
+            <Text style={[styles.whyOrder, styles.center]}>
+              {recipeInfo?.remainingQuantity === 0
+                ? 'Maximum number of orders reached !!! '
+                : `We only have ${recipeInfo?.remainingQuantity} order remaining order soon!!!`}
+            </Text>
             <Image
               style={{width: '100%', height: 250, marginBottom: 8}}
               resizeMode={'center'}
@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     marginBottom: 10,
+    color: '#e88f2a',
   },
   orderContainer: {
     backgroundColor: '#faf3eb',

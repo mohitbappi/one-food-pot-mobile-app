@@ -18,6 +18,7 @@ import 'yup-phone-lite';
 import {API} from '../axios.config';
 import AppHeader from '../component/AppHeader';
 import {ChatBot} from '../component/ChatBot';
+import {getFormattedMobile} from '../utils/formatted-mobile';
 import {CustomInput} from './AppLogin';
 
 const validationSchema = Yup.object().shape({
@@ -147,7 +148,7 @@ const AppProfile = () => {
                     style={{marginBottom: 8}}
                     label="Phone No"
                     labelStyle={{color: '#000'}}
-                    value={values?.mobile}
+                    value={getFormattedMobile(values?.mobile)}
                     isInvalid={!!touched?.mobile && !!errors?.mobile}
                     onChangeText={handleChange('mobile')}
                   />

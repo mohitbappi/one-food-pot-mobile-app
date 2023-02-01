@@ -81,7 +81,7 @@ export default () => {
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <Layout style={styles.container}>
-          <AppHeader title={'Onefood'} />
+          <AppHeader title={'Onefoodpot'} />
           <Divider />
           <Layout style={{padding: 15, margin: 15}}>
             <Text

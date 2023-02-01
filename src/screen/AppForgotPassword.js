@@ -16,7 +16,7 @@ export default () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <Layout style={styles.container}>
-        <AppHeader title={'Onefood'} />
+        <AppHeader title={'Onefoodpot'} />
         <Divider />
         <Layout style={{padding: 15, margin: 15}}>
           <Text

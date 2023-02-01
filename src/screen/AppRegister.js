@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 import 'yup-phone-lite';
 import {API} from '../axios.config.js';
 import {ChatBot} from '../component/ChatBot.js';
+import { getFormattedMobile } from '../utils/formatted-mobile.js';
 import {CustomInput} from './AppLogin';
 
 const initSchema = {
@@ -30,7 +31,7 @@ const initSchema = {
 };
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required().min(4).max(24),
+  name: Yup.string().required('This field is required').min(2).max(24),
   email: Yup.string().required().email(),
   mobile: Yup.string().phone('CA').required(),
   password: Yup.string().required('This field is required').min(6).max(18),
@@ -123,7 +124,7 @@ export default () => {
                     value={values?.name}
                     onChangeText={handleChange('name')}
                     isInvalid={!!touched?.name && !!errors?.name}
-                    errorMsg={'This field is required'}
+                    errorMsg={errors?.name}
                   />
                   <CustomInput
                     style={styles.inputStyle}
@@ -140,7 +141,7 @@ export default () => {
                   <CustomInput
                     style={styles.inputStyle}
                     label="Phone"
-                    value={values?.mobile}
+                    value={getFormattedMobile(values?.mobile)}
                     onChangeText={handleChange('mobile')}
                     isInvalid={!!touched?.mobile && !!errors?.mobile}
                     errorMsg={

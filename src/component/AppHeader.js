@@ -177,7 +177,7 @@ const AppHeader = ({title}) => {
           style={{margin: 16, width: 40, height: 25}}
           resizeMode="contain"
         />
-        <Text style={{fontWeight: 'bold'}}>{title}</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 16}}>{title}</Text>
       </View>
     );
   };

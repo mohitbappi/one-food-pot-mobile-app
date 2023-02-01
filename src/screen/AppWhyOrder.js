@@ -10,7 +10,7 @@ const AppWhyOrder = () => {
   return (
     <SafeAreaView style={{height: '100%'}}>
       <Layout style={styles.container}>
-        <AppHeader title={'Onefood'} />
+        <AppHeader title={'Onefoodpot'} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <ModalContent />
         </ScrollView>

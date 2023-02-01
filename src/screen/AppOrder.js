@@ -6,7 +6,7 @@
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import {useGooglePay, useStripe} from '@stripe/stripe-react-native';
 import {CheckBox, Divider, Icon, Layout, Text} from '@ui-kitten/components';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -62,6 +62,7 @@ const AppOrder = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [remainingQnty, setRemainingQnty] = useState(0);
+  const firstNav = useRef(false);
 
   useEffect(() => {
     if (params) {
@@ -118,17 +119,20 @@ const AppOrder = () => {
   }, [params, isF]);
 
   const toastConfig = {
-    error: props => <ErrorToast {...props} text1NumberOfLines={2} />,
+    error: props => (
+      <ErrorToast {...props} text1NumberOfLines={2} text1Style={styles.text1} />
+    ),
   };
 
   useEffect(() => {
-    if (remainingQnty === 1) {
+    if (remainingQnty === 0 && firstNav.current) {
       Toast.show({
         type: 'error',
         text1: `We have only ${recipeInfo?.remainingQuantity} order remaining. You have reached to maximum limit!!!`,
         text1NumberOfLines: 2,
       });
     }
+    firstNav.current = true;
   }, [remainingQnty]);
 
   useEffect(() => {
@@ -407,7 +411,10 @@ const AppOrder = () => {
       const paramsData = {
         withTipIncludes: parseFloat(jsonData?.tp)?.toFixed(2)?.toString(),
         address: params?.locationId,
-        qty: Number(jsonData?.qty),
+        qty:
+          jsonData?.qty > recipeInfo?.remainingQuantity
+            ? Number(recipeInfo?.remainingQuantity)
+            : Number(jsonData?.qty),
         isTip: jsonData?.isTip,
       };
       const response = await MakeCodOrder(paramsData, state?.token);
@@ -445,6 +452,8 @@ const AppOrder = () => {
       return () => backHandler.remove();
     }
   }, [isProcessing]);
+
+  console.log('check===', jsonData?.qty);
 
   return (
     <SafeAreaView style={{flex: 1, flexGrow: 1}}>
@@ -519,12 +528,14 @@ const AppOrder = () => {
                       paddingHorizontal: 15,
                     }}>
                     <Text style={{color: '#fff'}}>
-                      {jsonData?.qty?.toString() || ''}
+                      {jsonData?.qty > recipeInfo?.remainingQuantity
+                        ? recipeInfo?.remainingQuantity?.toString()
+                        : jsonData?.qty?.toString() || ''}
                     </Text>
                   </View>
                   <Pressable
                     onPress={handleQtyInc}
-                    disabled={remainingQnty === 1}
+                    disabled={remainingQnty === 0}
                     style={{
                       backgroundColor: '#e88f2a',
                       borderLeftColor: '#636363',
@@ -533,7 +544,7 @@ const AppOrder = () => {
                       borderTopRightRadius: 5,
                       borderBottomRightRadius: 5,
                       borderLeftWidth: 1,
-                      opacity: remainingQnty === 1 ? 0.6 : 1,
+                      opacity: remainingQnty === 0 ? 0.6 : 1,
                     }}>
                     <Icon
                       name="arrow-right-outline"
@@ -619,69 +630,6 @@ const AppOrder = () => {
                   styles.topBorder,
                   {paddingRight: '4%'},
                 ]}>
-                {/* Todo:- Will use it later. */}
-                {/* <Pressable
-                  style={{
-                    backgroundColor: '#e88f2a',
-                    marginLeft: 4,
-                    alignItems: 'center',
-                    paddingVertical: 8,
-                    borderRadius: 5,
-                    marginBottom: 10,
-                    paddingHorizontal: 20,
-                  }}
-                  onPress={() => {
-                    if (isProcessing) {
-                      Tost.show({
-                        type: 'error',
-                        text1: 'Other Payment is processing',
-                      });
-                    } else {
-                      createPaypalOrder();
-                    }
-                  }}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: '600',
-                      textAlign: 'center',
-                    }}>
-                    PayPal
-                  </Text>
-                </Pressable> */}
-                {/* Todo:- Will use it later. */}
-                {/* <Pressable
-                  style={{
-                    backgroundColor: '#e88f2a',
-                    marginLeft: 4,
-                    alignItems: 'center',
-                    paddingVertical: 8,
-                    borderRadius: 5,
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
-                  }}
-                  onPress={() => {
-                    if (isProcessing) {
-                      Tost.show({
-                        type: 'error',
-                        text1: 'Other Payment is processing',
-                      });
-                    } else {
-                      createStripeMobileOrder();
-                    }
-                  }}>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontWeight: '600',
-                      textAlign: 'center',
-                    }}>
-                    {`${
-                      (Platform.OS === 'ios' && 'Card or Apple Wallet') ||
-                      'Card'
-                    }`}
-                  </Text>
-                </Pressable> */}
                 <Pressable
                   style={{
                     backgroundColor: '#e88f2a',
@@ -713,31 +661,13 @@ const AppOrder = () => {
                     Pay On Delivery
                   </Text>
                 </Pressable>
-                {/* Todo:- Will use it later. */}
-                {/* {(Platform.OS !== 'ios' && (
-                  <Pressable
-                    onPress={() => {
-                      if (isProcessing) {
-                        Tost.show({
-                          type: 'error',
-                          text1: 'Other Payment is processing',
-                        });
-                      } else {
-                        presentGooglePaySheet();
-                      }
-                    }}>
-                    <Image
-                      source={require('../../assets/google_pay_button.png')}
-                      style={{
-                        width: Dimensions.get('window').width / 2.7,
-                        height: 40,
-                      }}
-                    />
-                  </Pressable>
-                )) ||
-                  null} */}
               </View>
             </View>
+            <Text style={styles.note}>
+              {
+                'Note: Cash or ZELLE ID : onefoodpot@gmail.com or\nVENMO ID : onefoodpot.'
+              }
+            </Text>
           </Layout>
         </ScrollView>
         <ChatBot />
@@ -876,5 +806,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(9,9,9,0.73)',
+  },
+  text1: {
+    color: '#e88f2a',
+  },
+  note: {
+    color: 'black',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 10,
   },
 });
