@@ -181,10 +181,18 @@ const AppOrder = () => {
     }
   }, [jsonData?.qty, jsonData?.isTip, isF]);
 
+  const checkQnty = qnty => {
+    if (qnty > recipeInfo?.remainingQuantity) {
+      return recipeInfo?.remainingQuantity;
+    }
+
+    return qnty;
+  };
+
   const handleQtyInc = () => {
     setJsonData(x => ({
       ...x,
-      qty: (parseInt(x?.qty) + 1).toString() || '',
+      qty: checkQnty(parseInt(x?.qty) + 1).toString() || '',
     }));
     setRemainingQnty(qnty => qnty - 1);
   };
@@ -195,7 +203,13 @@ const AppOrder = () => {
         ...x,
         qty: (parseInt(x?.qty) - 1).toString() || '',
       }));
-      setRemainingQnty(qnty => qnty + 1);
+
+      setRemainingQnty(qnty => {
+        if (qnty === 0) {
+          return qnty + 2;
+        }
+        return qnty + 1;
+      });
     }
   };
 
@@ -618,25 +632,18 @@ const AppOrder = () => {
               </View>
             </View>
             <View style={styles.tableRowContainer}>
-              <View style={[styles.tableCell, styles.topBorder]}>
+              <View style={[styles.tableCell, styles.topBorder, styles.top]}>
                 <Text style={{color: '#000'}}>{'Payment Options'}</Text>
               </View>
               <View
-                style={[
-                  styles.tableCell,
-                  styles.leftBorder,
-                  styles.topBorder,
-                  {paddingRight: '4%'},
-                ]}>
+                style={[styles.tableCell, styles.leftBorder, styles.topBorder]}>
                 <Pressable
                   style={{
                     backgroundColor: '#e88f2a',
                     marginLeft: 4,
                     alignItems: 'center',
-                    paddingVertical: 8,
+                    paddingVertical: 6,
                     borderRadius: 5,
-                    marginBottom: 10,
-                    paddingHorizontal: 10,
                   }}
                   onPress={() => {
                     if (isProcessing) {
@@ -659,13 +666,13 @@ const AppOrder = () => {
                     Pay On Delivery
                   </Text>
                 </Pressable>
+                <Text style={styles.note}>
+                  {
+                    'Cash or ZELLE ID : onefoodpot@gmail.com or\nVENMO ID : onefoodpot.'
+                  }
+                </Text>
               </View>
             </View>
-            <Text style={styles.note}>
-              {
-                'Note: Cash or ZELLE ID : onefoodpot@gmail.com or\nVENMO ID : onefoodpot.'
-              }
-            </Text>
           </Layout>
         </ScrollView>
         <ChatBot />
@@ -754,6 +761,9 @@ const styles = StyleSheet.create({
   topBorder: {
     borderTopWidth: 0,
   },
+  top: {
+    justifyContent: 'flex-start',
+  },
   icon: {
     height: 100,
     width: 100,
@@ -810,7 +820,7 @@ const styles = StyleSheet.create({
   },
   note: {
     color: 'black',
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: '600',
     marginTop: 10,
   },
